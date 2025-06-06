@@ -1,12 +1,18 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+import uuid
 from emotion_analyzer import EmotionAnalyzer
 from recommendation_engine import RecommendationEngine
+from database import DatabaseManager
 
 # Initialize session state
-if 'emotion_history' not in st.session_state:
-    st.session_state.emotion_history = []
+if 'session_id' not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())
+
+# Initialize database
+if 'db' not in st.session_state:
+    st.session_state.db = DatabaseManager()
 
 def main():
     st.title("🎭 Emotion-Aware Content Recommender")
