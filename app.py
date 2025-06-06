@@ -301,5 +301,34 @@ def display_emotion_history():
             st.session_state.db.clear_user_history(st.session_state.session_id)
             st.rerun()
 
+def display_saved_playlists():
+    """Display user's saved mood-based playlists"""
+    playlists = st.session_state.playlist_manager.get_user_playlists(st.session_state.session_id, limit=5)
+    
+    if playlists:
+        st.header("🎵 Your Saved Playlists")
+        
+        for playlist in playlists:
+            with st.expander(f"{playlist['theme']['name']} - {playlist['emotion'].title()} ({playlist['created_at'].strftime('%m/%d %H:%M')})"):
+                col1, col2 = st.columns([2, 1])
+                
+                with col1:
+                    st.markdown(f"**{playlist['theme']['description']}**")
+                    st.markdown(f"• Movies: {len(playlist['content']['movies'])}")
+                    st.markdown(f"• Videos: {len(playlist['content']['youtube_videos'])}")
+                    st.markdown(f"• Music tracks: {len(playlist['content']['spotify_tracks'])}")
+                
+                with col2:
+                    st.markdown(f"**Duration:** {playlist['stats']['total_duration_estimate']['total_hours']} hours")
+                    st.markdown(
+                        f"<div style='background-color: {playlist['theme']['color_theme']}; "
+                        f"color: white; padding: 5px; border-radius: 3px; text-align: center; font-size: 12px;'>"
+                        f"{playlist['theme']['name']}</div>",
+                        unsafe_allow_html=True
+                    )
+                
+                if st.button(f"View Full Playlist", key=f"view_{playlist['id']}"):
+                    display_mood_playlist(playlist)
+
 if __name__ == "__main__":
     main()
