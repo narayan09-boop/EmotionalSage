@@ -69,6 +69,21 @@ class DatabaseManager:
                         )
                     """)
                     
+                    # Create playlists table
+                    cur.execute("""
+                        CREATE TABLE IF NOT EXISTS playlists (
+                            id SERIAL PRIMARY KEY,
+                            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                            session_id VARCHAR(255) NOT NULL,
+                            playlist_id VARCHAR(255) UNIQUE NOT NULL,
+                            emotion VARCHAR(50) NOT NULL,
+                            theme_data JSON NOT NULL,
+                            content_data JSON NOT NULL,
+                            stats_data JSON NOT NULL,
+                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                        )
+                    """)
+                    
                     conn.commit()
                     print("Database tables initialized successfully")
                     

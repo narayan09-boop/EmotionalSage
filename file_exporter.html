@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emotion Recommender App Files</title>
+    <style>
+        body { font-family: monospace; margin: 20px; }
+        .file-section { margin: 20px 0; border: 2px solid #333; }
+        .file-header { background: #333; color: white; padding: 10px; font-weight: bold; }
+        .file-content { background: #f5f5f5; padding: 15px; white-space: pre-wrap; overflow-x: auto; }
+        .copy-btn { background: #007cba; color: white; padding: 5px 10px; cursor: pointer; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Emotion-Aware Content Recommender - Source Files</h1>
+    <p>Copy each file section below to recreate the application locally.</p>
+    
+    <div class="file-section">
+        <div class="file-header">📁 Directory Structure</div>
+        <div class="file-content">emotion-recommender-app/
+├── app.py
+├── emotion_analyzer.py
+├── movie_recommender.py
+├── youtube_recommender.py
+├── recommendation_engine.py
+├── database.py
+├── playlist_manager.py
+├── .streamlit/
+│   └── config.toml
+└── requirements.txt</div>
+    </div>
+
+    <div class="file-section">
+        <div class="file-header">📋 Installation Instructions</div>
+        <div class="file-content">1. Install Python 3.11+
+2. Create project directory: mkdir emotion-recommender-app && cd emotion-recommender-app
+3. Install dependencies: pip install streamlit pandas psycopg2-binary textblob vadersentiment requests
+4. Set environment variables (see below)
+5. Create all files from sections below
+6. Run: streamlit run app.py --server.port 5000</div>
+    </div>
+
+    <div class="file-section">
+        <div class="file-header">🔑 Environment Variables</div>
+        <div class="file-content">DATABASE_URL=postgresql://user:password@host:port/database
+YOUTUBE_API_KEY=your_youtube_api_key
+TMDB_API_KEY=your_tmdb_api_key (optional)
+SPOTIFY_CLIENT_ID=your_spotify_client_id (optional)
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret (optional)</div>
+    </div>
+</body>
+</html>

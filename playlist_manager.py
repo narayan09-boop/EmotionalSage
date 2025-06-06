@@ -202,6 +202,8 @@ class PlaylistManager:
             # Get Spotify tracks if not provided
             if spotify_tracks is None:
                 spotify_tracks = self.search_spotify_tracks(emotion, limit=8)
+            if spotify_tracks is None:
+                spotify_tracks = []
             
             playlist = {
                 'id': f"playlist_{emotion}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
