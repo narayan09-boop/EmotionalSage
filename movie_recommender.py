@@ -37,8 +37,8 @@ class MovieRecommender:
         """
         try:
             if not self.api_key:
-                print("TMDB API key not found")
-                return []
+                # Return curated static recommendations when API is not available
+                return self._get_curated_recommendations(emotion, limit)
             
             # Get genre IDs for the emotion
             genre_ids = self.emotion_genre_map.get(emotion.lower(), [35])  # Default to comedy
@@ -167,3 +167,49 @@ class MovieRecommender:
         except Exception as e:
             print(f"Error searching movies by keyword: {str(e)}")
             return []
+    
+    def _get_curated_recommendations(self, emotion: str, limit: int = 6) -> List[Dict]:
+        """
+        Get curated movie recommendations when API is not available
+        """
+        curated_movies = {
+            'joy': [
+                {'id': 1, 'title': 'The Grand Budapest Hotel', 'overview': 'A whimsical comedy about the adventures of a legendary concierge and his protégé at a famous European hotel.', 'rating': 8.1, 'year': '2014', 'genres': ['Comedy', 'Drama'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 2, 'title': 'Paddington', 'overview': 'A young Peruvian bear travels to London in search of a home, finding himself caught up in a series of misadventures.', 'rating': 8.0, 'year': '2014', 'genres': ['Family', 'Comedy'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 3, 'title': 'La La Land', 'overview': 'A jazz musician and an aspiring actress meet and fall in love in Los Angeles while pursuing their dreams.', 'rating': 8.0, 'year': '2016', 'genres': ['Musical', 'Romance'], 'poster_url': None, 'tmdb_url': '#'},
+            ],
+            'sadness': [
+                {'id': 4, 'title': 'Inside Out', 'overview': 'After moving to a new city, young Riley struggles with her emotions as they try to guide her through this difficult life change.', 'rating': 8.1, 'year': '2015', 'genres': ['Animation', 'Drama'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 5, 'title': 'Her', 'overview': 'A lonely writer develops an unlikely relationship with an operating system designed to meet his every need.', 'rating': 8.0, 'year': '2013', 'genres': ['Drama', 'Romance'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 6, 'title': 'Manchester by the Sea', 'overview': 'A depressed uncle is asked to take care of his teenage nephew after the boy\'s father dies.', 'rating': 7.8, 'year': '2016', 'genres': ['Drama'], 'poster_url': None, 'tmdb_url': '#'},
+            ],
+            'anger': [
+                {'id': 7, 'title': 'Mad Max: Fury Road', 'overview': 'In a post-apocalyptic wasteland, Max teams up with a mysterious woman to flee from a warlord and his army.', 'rating': 8.1, 'year': '2015', 'genres': ['Action', 'Adventure'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 8, 'title': 'John Wick', 'overview': 'An ex-hitman comes out of retirement to track down the gangsters that took everything from him.', 'rating': 7.4, 'year': '2014', 'genres': ['Action', 'Thriller'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 9, 'title': 'The Raid', 'overview': 'A SWAT team becomes trapped in a tenement run by a ruthless mobster and his army of killers and thugs.', 'rating': 7.6, 'year': '2011', 'genres': ['Action', 'Thriller'], 'poster_url': None, 'tmdb_url': '#'},
+            ],
+            'fear': [
+                {'id': 10, 'title': 'A Quiet Place', 'overview': 'A family lives in silence to avoid detection by alien creatures that hunt by sound.', 'rating': 7.5, 'year': '2018', 'genres': ['Horror', 'Thriller'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 11, 'title': 'Get Out', 'overview': 'A young African-American visits his white girlfriend\'s parents for the weekend, where his simmering uneasiness becomes a nightmare.', 'rating': 7.7, 'year': '2017', 'genres': ['Horror', 'Mystery'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 12, 'title': 'Hereditary', 'overview': 'A grieving family is haunted by tragedy and disturbing secrets.', 'rating': 7.3, 'year': '2018', 'genres': ['Horror', 'Mystery'], 'poster_url': None, 'tmdb_url': '#'},
+            ],
+            'love': [
+                {'id': 13, 'title': 'The Princess Bride', 'overview': 'A bedridden boy\'s grandfather reads him the story of a farmboy-turned-pirate who encounters numerous obstacles and enemies in his quest to be reunited with his true love.', 'rating': 8.0, 'year': '1987', 'genres': ['Adventure', 'Romance'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 14, 'title': 'Before Sunset', 'overview': 'Nine years after their first encounter, Jesse and Celine meet again during Jesse\'s book tour in Paris.', 'rating': 8.1, 'year': '2004', 'genres': ['Drama', 'Romance'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 15, 'title': 'Eternal Sunshine of the Spotless Mind', 'overview': 'When their relationship turns sour, a couple undergoes a medical procedure to have each other erased from their memories.', 'rating': 8.3, 'year': '2004', 'genres': ['Drama', 'Romance'], 'poster_url': None, 'tmdb_url': '#'},
+            ],
+            'calm': [
+                {'id': 16, 'title': 'My Neighbor Totoro', 'overview': 'When two girls move to the country to be near their ailing mother, they have adventures with the wondrous forest spirits who live nearby.', 'rating': 8.2, 'year': '1988', 'genres': ['Animation', 'Family'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 17, 'title': 'Lost in Translation', 'overview': 'A faded movie star and a neglected young woman form an unlikely bond after crossing paths in Tokyo.', 'rating': 7.7, 'year': '2003', 'genres': ['Drama'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 18, 'title': 'The Tree of Life', 'overview': 'The story of a family in 1950s Texas, told through the eyes of the eldest son, with glimpses of his adult life.', 'rating': 6.8, 'year': '2011', 'genres': ['Drama'], 'poster_url': None, 'tmdb_url': '#'},
+            ],
+            'stress': [
+                {'id': 19, 'title': 'Spirited Away', 'overview': 'During her family\'s move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods and witches.', 'rating': 9.3, 'year': '2001', 'genres': ['Animation', 'Adventure'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 20, 'title': 'Kiki\'s Delivery Service', 'overview': 'A young witch, on her mandatory year of independent life, finds fitting into a new community difficult.', 'rating': 7.9, 'year': '1989', 'genres': ['Animation', 'Family'], 'poster_url': None, 'tmdb_url': '#'},
+                {'id': 21, 'title': 'The Grand Budapest Hotel', 'overview': 'A whimsical comedy about the adventures of a legendary concierge and his protégé at a famous European hotel.', 'rating': 8.1, 'year': '2014', 'genres': ['Comedy', 'Drama'], 'poster_url': None, 'tmdb_url': '#'},
+            ]
+        }
+        
+        # Get movies for the emotion, fallback to joy if emotion not found
+        emotion_movies = curated_movies.get(emotion.lower(), curated_movies['joy'])
+        return emotion_movies[:limit]
