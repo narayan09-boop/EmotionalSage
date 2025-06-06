@@ -103,6 +103,7 @@ class DatabaseManager:
                             user_id = result[0]
                             conn.commit()
                             return user_id
+                        return 1  # Return default if no result
                         
         except Exception as e:
             print(f"Error getting/creating user: {str(e)}")

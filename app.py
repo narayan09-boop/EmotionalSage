@@ -37,13 +37,10 @@ def main():
                 emotion_result = emotion_analyzer.analyze_emotion(user_text)
                 
                 if emotion_result:
-                    # Store in history
-                    st.session_state.emotion_history.append({
-                        'timestamp': datetime.now(),
-                        'text': user_text[:100] + "..." if len(user_text) > 100 else user_text,
-                        'emotion': emotion_result['primary_emotion'],
-                        'confidence': emotion_result['confidence']
-                    })
+                    # Save to database
+                    emotion_history_id = st.session_state.db.save_emotion_analysis(
+                        st.session_state.session_id, user_text, emotion_result
+                    )
                     
                     # Display emotion analysis
                     st.success(f"**Detected Emotion:** {emotion_result['primary_emotion'].title()} "
@@ -57,6 +54,9 @@ def main():
                         recommendations = recommendation_engine.get_recommendations(emotion_result)
                         
                         if recommendations:
+                            # Save recommendations to database
+                            if emotion_history_id:
+                                st.session_state.db.save_recommendations(emotion_history_id, recommendations)
                             display_recommendations(recommendations, emotion_result)
                         else:
                             st.error("Sorry, we couldn't find recommendations right now. Please try again later.")
@@ -112,13 +112,14 @@ def display_recommendations(recommendations, emotion_result):
             st.markdown("---")
 
 def display_emotion_history():
-    if st.session_state.emotion_history:
+    # Get emotion history from database
+    emotion_history = st.session_state.db.get_emotion_history(st.session_state.session_id, limit=5)
+    
+    if emotion_history:
         st.header("📊 Your Emotion History")
         
         # Show recent emotions
-        recent_emotions = st.session_state.emotion_history[-5:]  # Last 5 entries
-        
-        for entry in reversed(recent_emotions):
+        for entry in emotion_history:
             col1, col2, col3 = st.columns([2, 1, 1])
             
             with col1:
@@ -130,8 +131,23 @@ def display_emotion_history():
             with col3:
                 st.markdown(f"{entry['timestamp'].strftime('%m/%d %H:%M')}")
         
+        # Display emotion statistics
+        stats = st.session_state.db.get_emotion_stats(st.session_state.session_id)
+        if stats['emotion_counts']:
+            st.subheader("📈 Emotion Analytics")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown("**Most Frequent Emotions:**")
+                for emotion, count in list(stats['emotion_counts'].items())[:3]:
+                    st.markdown(f"• {emotion.title()}: {count} times")
+            
+            with col2:
+                st.markdown(f"**Average Confidence:** {stats['avg_confidence']:.1%}")
+        
         if st.button("Clear History"):
-            st.session_state.emotion_history = []
+            st.session_state.db.clear_user_history(st.session_state.session_id)
             st.rerun()
 
 if __name__ == "__main__":
